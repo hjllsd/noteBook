@@ -1,0 +1,2 @@
+## 介绍
+Java的三大平台包含JAVASE,JAVAEE,JAVAME,其中JAVASE是标准版为其他两个版本提供基础,JAVAME为小型设备提供支持,但已经逐渐落寞无人使用了,而JAVAEE是为服务器提供技术支持是服务器开发的龙头语言

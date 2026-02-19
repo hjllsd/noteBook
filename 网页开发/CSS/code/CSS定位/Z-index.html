@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Z-index</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      body div {
+        width: 100px;
+        height: 100px;
+        background-color: pink;
+        position: absolute;
+        top: 100px;
+        left: 100px;
+      }
+      body div.red {
+        /* 取值是整数，默认是0，取值越大显示顺序越靠上 */
+        z-index: 1;
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="red"></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </body>
+</html>

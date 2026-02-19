@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>过渡属性</title>
+    <style>
+      body div {
+        width: 200px;
+        height: 200px;
+        background-color: red;
+        transition: width 2s, height 2s, background-color 2s, transform 2s;
+      }
+      body div:hover {
+        width: 400px;
+        height: 400px;
+        background-color: blue;
+        transform: rotate(180deg);
+      }
+    </style>
+  </head>
+  <body>
+    <div></div>
+  </body>
+</html>

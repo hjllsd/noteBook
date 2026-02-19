@@ -1,0 +1,218 @@
+{
+  "main": {
+    "id": "09cf5e972e4f3654",
+    "type": "split",
+    "children": [
+      {
+        "id": "410970ebd2c23f94",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9a29f086a770bcaa",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "新标签页"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "85aeae43fb4c1bb6",
+    "type": "split",
+    "children": [
+      {
+        "id": "8c78b48bc5bbf789",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e888c18fd5ba721e",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "fedee6d6c687df2a",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "6e470badcb9a0e33",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "6cd2e26ca2798066",
+    "type": "split",
+    "children": [
+      {
+        "id": "e96e67dd48241898",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "88abfcc5b0de4eb9",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "数学/小学数学/books/小学数学基础知识.pdf",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "小学数学基础知识 的反向链接列表"
+            }
+          },
+          {
+            "id": "429d29904118cdbc",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "出链"
+            }
+          },
+          {
+            "id": "02ce26c84284cbd9",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "d4e407c38be070e8",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "大纲"
+            }
+          },
+          {
+            "id": "251f880ea998c978",
+            "type": "leaf",
+            "state": {
+              "type": "calendar",
+              "state": {},
+              "icon": "calendar-with-checkmark",
+              "title": "Calendar"
+            }
+          },
+          {
+            "id": "d51f0e8189b2348e",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
+          }
+        ],
+        "currentTab": 5
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "bases:新建数据库": false,
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "obsidian-excalidraw-plugin:新建绘图文件": false,
+      "templater-obsidian:Templater": false,
+      "pdf-plus:PDF++: Toggle auto-copy": false,
+      "pdf-plus:PDF++: Toggle auto-focus": false,
+      "pdf-plus:PDF++: Toggle auto-paste": false,
+      "periodic-notes:Open today": false,
+      "obsidian-git:Open Git source control": false,
+      "githobs:Manage a github issue": false
+    }
+  },
+  "active": "e888c18fd5ba721e",
+  "lastOpenFiles": [
+    "未命名",
+    "数学/小学数学/未命名.md",
+    "数学/小学数学/算术/整数/加法.md",
+    "数学/小学数学/算术/整数",
+    "数学/小学数学/几何",
+    "数学/小学数学/算术",
+    "数学/小学数学/books/小学数学基础知识.pdf",
+    "数学/小学数学/books/小学数学知识归纳与复习.pdf",
+    "数学/初中数学/books/数理化自学丛书第2版+代数+第1册+最新版本+调整页面尺寸.pdf",
+    "复盘/周复盘/2026年 - 2月2日 - 2月8日.md",
+    "复盘/日复盘/2025-06-28 日复盘.md",
+    "复盘/日复盘/2026-02-09 日复盘.md",
+    "复盘/日复盘/2025-06-23 日复盘.md",
+    "复盘/周复盘",
+    "我的方法论/时间方法论整理/零碎.md",
+    "社会工程学/books/社会工程：安全体系中的人性漏洞 ([美]Christopher Hadnagy [Hadnagy, Christopher]) (Z-Library).pdf",
+    "我的方法论/时间方法论整理",
+    "社会工程学/books/反欺骗的艺术 世界传奇黑客的经历分享 (凯文·米特尼克 (Kevin D. Mitnick)) (Z-Library).pdf",
+    "社会工程学.md",
+    "未命名 1.md",
+    "写作/什么是方法论和工作流,为什么需要,怎么使用.md"
+  ]
+}

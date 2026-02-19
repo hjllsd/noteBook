@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>案例-京东服务</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .service {
+        width: 1190px;
+        height: 42px;
+        margin: 100px auto;
+      }
+      ul {
+        display: flex;
+      }
+      ul > li {
+        display: flex;
+        list-style: none;
+        padding-left: 40px;
+        height: 42px;
+        line-height: 42px;
+      }
+      ul > li h5 {
+        width: 36px;
+        margin-right: 10px;
+        background-image: url(./image/sprite.png);
+      }
+      ul > li:nth-child(1) h5 {
+        background-position: 0px -192px;
+      }
+      ul > li:nth-child(2) h5 {
+        background-position: -41px -192px;
+      }
+      ul > li:nth-child(3) h5 {
+        background-position: -82px -192px;
+      }
+      ul > li:nth-child(4) h5 {
+        background-position: -123px -192px;
+      }
+      ul > li strong {
+        font-size: 18px;
+        color: #444;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="service">
+      <ul>
+        <li>
+          <h5></h5>
+          <strong>品类齐全，轻松购物</strong>
+        </li>
+        <li>
+          <h5></h5>
+          <strong>多仓直发，极速配送</strong>
+        </li>
+        <li>
+          <h5></h5>
+          <strong>正品行货，精致服务</strong>
+        </li>
+        <li>
+          <h5></h5>
+          <strong>天天低价，畅选无忧</strong>
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>
