@@ -50,13 +50,10 @@ jobs:
           echo "Generated file:"
           ls -lh "$FILE_NAME"
 
-      - name: 上传到 WebDAV
-        uses: bxb100/action-upload@main
-        with:
-          provider: webdav
-          provider_options: |
-            endpoint=${{ secrets.WEBDAV_URL }}
-            username=${{ secrets.WEBDAV_USERNAME }}
-            password=${{ secrets.WEBDAV_PASSWORD }}
-          include: backup-*.zip
-          path: /backups/github/noteBook/
+      - name: 上传到 WebDAV via curl
+        run: |
+          FILE=$(ls backup-*.zip | head -n 1)
+          echo "Uploading $FILE to WebDAV..."
+          curl -T "$FILE" \
+            -u "${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}" \
+            "${{ secrets.WEBDAV_URL }}/backups/github/noteBook/$FILE"
