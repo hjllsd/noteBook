@@ -29,6 +29,7 @@ jobs:
     needs: check-recent-commits
     if: ${{ needs.check-recent-commits.outputs.has_recent_commits == 'true' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
+    environment: webdav          # ← 添加这一行！关键
     steps:
       - uses: actions/checkout@v4
 
