@@ -1,8 +1,8 @@
-name: Backup to WebDAV (only if recent commits)
+name: Backup to WebDAV (Production)
 
 on:
   schedule:
-    - cron: '0 3 * * 1'    # 每周一 03:00 UTC
+    - cron: '0 3 * * 1'
   workflow_dispatch:
 
 jobs:
@@ -37,23 +37,68 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 打包备份 zip
+      - name: 打包备份
         run: |
-          set -e
-          FILE_NAME="backup-$(date +%Y%m%d-%H%M).zip"
+          set -euo pipefail
+          FILE_NAME="backup-$(date +%Y%m%d-%H%M%S).zip"
 
           zip -r "$FILE_NAME" . \
             -x ".git/*" \
                ".github/*" \
                "backup-*.zip"
 
-          echo "Generated file:"
+          echo "Generated:"
           ls -lh "$FILE_NAME"
 
-      - name: 上传到 WebDAV via curl
+      - name: 创建远程目录（自动）
         run: |
+          set -euo pipefail
+          BASE="${{ secrets.WEBDAV_URL }}"
+          AUTH="${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}"
+          MONTH=$(date +%Y-%m)
+
+          echo "Creating remote directories..."
+
+          curl -s -X MKCOL -u "$AUTH" "$BASE/backups" || true
+          curl -s -X MKCOL -u "$AUTH" "$BASE/backups/github" || true
+          curl -s -X MKCOL -u "$AUTH" "$BASE/backups/github/noteBook" || true
+          curl -s -X MKCOL -u "$AUTH" "$BASE/backups/github/noteBook/$MONTH" || true
+
+      - name: 上传备份
+        run: |
+          set -euo pipefail
           FILE=$(ls backup-*.zip | head -n 1)
-          echo "Uploading $FILE to WebDAV..."
-          curl -T "$FILE" \
+          MONTH=$(date +%Y-%m)
+
+          echo "Uploading $FILE ..."
+          curl -f -T "$FILE" \
             -u "${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}" \
-            "${{ secrets.WEBDAV_URL }}/backups/github/noteBook/$FILE"
+            "${{ secrets.WEBDAV_URL }}/backups/github/noteBook/$MONTH/$FILE"
+
+          echo "Upload complete."
+
+      - name: 删除30天前旧备份
+        run: |
+          set -euo pipefail
+          AUTH="${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}"
+          BASE="${{ secrets.WEBDAV_URL }}/backups/github/noteBook"
+
+          echo "Cleaning backups older than 30 days..."
+
+          # 获取文件列表
+          curl -s -u "$AUTH" -X PROPFIND "$BASE/" \
+            -H "Depth: 2" \
+            | grep -oE 'backup-[0-9]{8}-[0-9]{6}\.zip' \
+            | sort -u \
+            | while read file; do
+
+              file_date=$(echo "$file" | cut -d'-' -f2)
+              file_ts=$(date -d "$file_date" +%s || echo 0)
+              now_ts=$(date +%s)
+              diff_days=$(( (now_ts - file_ts) / 86400 ))
+
+              if [ "$diff_days" -gt 30 ]; then
+                echo "Deleting old backup: $file"
+                curl -s -X DELETE -u "$AUTH" "$BASE/*/$file" || true
+              fi
+            done
