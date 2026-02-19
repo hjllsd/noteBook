@@ -3,7 +3,7 @@ name: Backup to WebDAV (only if recent commits)
 on:
   schedule:
     - cron: '0 3 * * 1'    # 每周一 03:00 UTC
-  workflow_dispatch:       # 允许手动触发（测试用）
+  workflow_dispatch:
 
 jobs:
   check-recent-commits:
@@ -15,7 +15,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 检查最近7天是否有任何 commit
+      - name: 检查最近7天是否有 commit
         id: check
         run: |
           count=$(git rev-list --after="7 days ago" HEAD --count)
@@ -31,6 +31,7 @@ jobs:
     if: ${{ needs.check-recent-commits.outputs.has_recent_commits == 'true' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     environment: webdav
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -39,8 +40,6 @@ jobs:
       - name: 打包备份 zip
         run: |
           set -e
-          tree -L 2 || ls -R
-
           FILE_NAME="backup-$(date +%Y%m%d-%H%M).zip"
 
           zip -r "$FILE_NAME" . \
@@ -48,6 +47,7 @@ jobs:
                ".github/*" \
                "backup-*.zip"
 
+          echo "Generated file:"
           ls -lh "$FILE_NAME"
 
       - name: 上传到 WebDAV
@@ -59,3 +59,4 @@ jobs:
             username=${{ secrets.WEBDAV_USERNAME }}
             password=${{ secrets.WEBDAV_PASSWORD }}
           include: backup-*.zip
+          path: /backups/github/noteBook/
