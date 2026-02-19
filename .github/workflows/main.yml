@@ -13,19 +13,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0     # 需要完整历史来检查 commit
+          fetch-depth: 0
 
       - name: 检查最近7天是否有任何 commit
         id: check
         run: |
           count=$(git rev-list --after="7 days ago" HEAD --count)
+          echo "Recent commit count: $count"
           if [ "$count" -gt 0 ]; then
             echo "has_recent=true" >> $GITHUB_OUTPUT
           else
             echo "has_recent=false" >> $GITHUB_OUTPUT
           fi
 
-   backup:
+  backup:
     needs: check-recent-commits
     if: ${{ needs.check-recent-commits.outputs.has_recent_commits == 'true' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
@@ -33,22 +34,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # 如果后面要用 git log 可保留
+          fetch-depth: 0
 
-      - name: 打包备份zip
+      - name: 打包备份 zip
         run: |
-          # 调试：显示目录结构
+          set -e
           tree -L 2 || ls -R
-          
-          # 打包示例1：整个仓库（最保险，但会包含 .github/ 等）
-          zip -r "backup-$(date +%Y%m%d-%H%M).zip" . -x ".git/*" "backup-*.zip" || echo "zip failed"
-          
-          # 打包示例2：只打包 md 文件 + 附件（更干净，推荐）
-          # find . -type f \( -name "*.md" -o -name "*.png" -o -name "*.jpg" -o -name "*.pdf" \) | zip -@ "backup-$(date +%Y%m%d-%H%M).zip"
-          
-          ls -lh backup-*.zip   # 确认 zip 是否生成
 
-      - name: 上传到WebDAV
+          FILE_NAME="backup-$(date +%Y%m%d-%H%M).zip"
+
+          zip -r "$FILE_NAME" . \
+            -x ".git/*" \
+               ".github/*" \
+               "backup-*.zip"
+
+          ls -lh "$FILE_NAME"
+
+      - name: 上传到 WebDAV
         uses: bxb100/action-upload@main
         with:
           provider: webdav
