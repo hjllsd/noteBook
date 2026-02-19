@@ -41,64 +41,42 @@ jobs:
         run: |
           set -euo pipefail
           FILE_NAME="backup-$(date +%Y%m%d-%H%M%S).zip"
-
-          zip -r "$FILE_NAME" . \
-            -x ".git/*" \
-               ".github/*" \
-               "backup-*.zip"
-
-          echo "Generated:"
+          zip -r "$FILE_NAME" . -x ".git/*" ".github/*" "backup-*.zip"
+          echo "FILE_NAME=$FILE_NAME" >> $GITHUB_ENV
           ls -lh "$FILE_NAME"
 
-      - name: 创建远程目录（自动）
+      - name: 创建远程目录
         run: |
           set -euo pipefail
           BASE="${{ secrets.WEBDAV_URL }}"
           AUTH="${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}"
           MONTH=$(date +%Y-%m)
-
-          echo "Creating remote directories..."
-
-          curl -s -X MKCOL -u "$AUTH" "$BASE/backups" || true
-          curl -s -X MKCOL -u "$AUTH" "$BASE/backups/github" || true
-          curl -s -X MKCOL -u "$AUTH" "$BASE/backups/github/noteBook" || true
-          curl -s -X MKCOL -u "$AUTH" "$BASE/backups/github/noteBook/$MONTH" || true
+          for path in "backups" "backups/github" "backups/github/noteBook" "backups/github/noteBook/$MONTH"; do
+            curl -s -o /dev/null -w "%{http_code}" -X MKCOL -u "$AUTH" "$BASE/$path" || true
+          done
 
       - name: 上传备份
         run: |
           set -euo pipefail
-          FILE=$(ls backup-*.zip | head -n 1)
           MONTH=$(date +%Y-%m)
-
-          echo "Uploading $FILE ..."
-          curl -f -T "$FILE" \
+          curl -f -T "$FILE_NAME" \
             -u "${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}" \
-            "${{ secrets.WEBDAV_URL }}/backups/github/noteBook/$MONTH/$FILE"
-
-          echo "Upload complete."
+            "${{ secrets.WEBDAV_URL }}/backups/github/noteBook/$MONTH/$FILE_NAME"
+          echo "Upload complete: $FILE_NAME"
 
       - name: 删除30天前旧备份
         run: |
-          set -euo pipefail
           AUTH="${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}"
           BASE="${{ secrets.WEBDAV_URL }}/backups/github/noteBook"
-
-          echo "Cleaning backups older than 30 days..."
-
-          # 获取文件列表
-          curl -s -u "$AUTH" -X PROPFIND "$BASE/" \
-            -H "Depth: 2" \
-            | grep -oE 'backup-[0-9]{8}-[0-9]{6}\.zip' \
-            | sort -u \
+          now_ts=$(date +%s)
+          curl -s -u "$AUTH" -X PROPFIND "$BASE/" -H "Depth: 2" \
+            | grep -oE 'backup-[0-9]{8}-[0-9]{6}\.zip' | sort -u \
             | while read file; do
-
-              file_date=$(echo "$file" | cut -d'-' -f2)
-              file_ts=$(date -d "$file_date" +%s || echo 0)
-              now_ts=$(date +%s)
+              file_date=$(echo "$file" | grep -oE '[0-9]{8}')
+              file_ts=$(date -d "$file_date" +%s 2>/dev/null || echo 0)
               diff_days=$(( (now_ts - file_ts) / 86400 ))
-
               if [ "$diff_days" -gt 30 ]; then
-                echo "Deleting old backup: $file"
+                echo "Deleting: $file"
                 curl -s -X DELETE -u "$AUTH" "$BASE/*/$file" || true
               fi
             done
