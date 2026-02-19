@@ -25,35 +25,35 @@ jobs:
             echo "has_recent=false" >> $GITHUB_OUTPUT
           fi
 
-  backup:
+   backup:
     needs: check-recent-commits
     if: ${{ needs.check-recent-commits.outputs.has_recent_commits == 'true' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
-    environment: webdav     # 如果你用了环境变量保护 secrets，可以保留
-
+    environment: webdav
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 如果后面要用 git log 可保留
 
-      - name: 打包备份 zip（固定文件名，方便覆盖或管理）
+      - name: 打包备份zip
         run: |
-          zip -r backup-$(date +%Y%m%d-%H%M).zip docs/ config/ .github/
+          # 调试：显示目录结构
+          tree -L 2 || ls -R
+          
+          # 打包示例1：整个仓库（最保险，但会包含 .github/ 等）
+          zip -r "backup-$(date +%Y%m%d-%H%M).zip" . -x ".git/*" "backup-*.zip" || echo "zip failed"
+          
+          # 打包示例2：只打包 md 文件 + 附件（更干净，推荐）
+          # find . -type f \( -name "*.md" -o -name "*.png" -o -name "*.jpg" -o -name "*.pdf" \) | zip -@ "backup-$(date +%Y%m%d-%H%M).zip"
+          
+          ls -lh backup-*.zip   # 确认 zip 是否生成
 
-      - name: 上传到 WebDAV（使用新版 action，支持通配符）
-        uses: bxb100/action-upload@main   # 或 @v0.0.4 如果想要固定版本
+      - name: 上传到WebDAV
+        uses: bxb100/action-upload@main
         with:
           provider: webdav
-
-          url:      ${{ secrets.WEBDAV_URL }}       # 通常是 https://xxx/remote.php/dav/files/xxx/
-          username: ${{ secrets.WEBDAV_USERNAME }}
-          password: ${{ secrets.WEBDAV_PASSWORD }}
-
-          root:     backups/github/my-noteBook/     # 远程目录，要以 / 开头和结尾
-
-          include:  |
-            backup-*.zip
-
-          # 可选：如果想覆盖同名文件（取决于服务器支持）
-          # overwrite: true   # 这个 action 可能不支持，需测试
-
-          # 可选：只上传，不保留本地（默认会保留）
-          # cleanup: true
+          provider_options: |
+            endpoint=${{ secrets.WEBDAV_URL }}
+            username=${{ secrets.WEBDAV_USERNAME }}
+            password=${{ secrets.WEBDAV_PASSWORD }}
+          include: backup-*.zip
