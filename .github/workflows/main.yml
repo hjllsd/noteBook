@@ -2,8 +2,8 @@ name: Backup to WebDAV (only if recent commits)
 
 on:
   schedule:
-    - cron: '0 3 * * 1'      # 每周一 03:00 UTC
-  workflow_dispatch:         # 允许手动触发（测试用）
+    - cron: '0 3 * * 1'    # 每周一 03:00 UTC
+  workflow_dispatch:       # 允许手动触发（测试用）
 
 jobs:
   check-recent-commits:
@@ -13,13 +13,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0       # 需要完整历史才能检查 rev-list
+          fetch-depth: 0     # 需要完整历史来检查 commit
 
       - name: 检查最近7天是否有任何 commit
         id: check
         run: |
-          # 检查最近7天是否有任何 commit（从 HEAD 往前看）
-          if git rev-list --after="7 days ago" HEAD --count | grep -q "[1-9]"; then
+          count=$(git rev-list --after="7 days ago" HEAD --count)
+          if [ "$count" -gt 0 ]; then
             echo "has_recent=true" >> $GITHUB_OUTPUT
           else
             echo "has_recent=false" >> $GITHUB_OUTPUT
@@ -29,20 +29,31 @@ jobs:
     needs: check-recent-commits
     if: ${{ needs.check-recent-commits.outputs.has_recent_commits == 'true' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
-    environment: webdav          # ← 添加这一行！关键
+    environment: webdav     # 如果你用了环境变量保护 secrets，可以保留
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: 打包备份zip
+      - name: 打包备份 zip（固定文件名，方便覆盖或管理）
         run: |
-          zip -r backup-$(date +%Y%m%d).zip docs/ config/ .github/
+          zip -r backup-$(date +%Y%m%d-%H%M).zip docs/ config/ .github/
 
-      - name: 上传到WebDAV
-        uses: bxb100/action-upload-webdav@v1
+      - name: 上传到 WebDAV（使用新版 action，支持通配符）
+        uses: bxb100/action-upload@main   # 或 @v0.0.4 如果想要固定版本
         with:
-          webdav_address: ${{ secrets.WEBDAV_URL }}
-          webdav_username: ${{ secrets.WEBDAV_USERNAME }}
-          webdav_password: ${{ secrets.WEBDAV_PASSWORD }}
-          source_path: backup-*.zip
-          remote_path: backups/github/my-noteBook/   # 可选
-          # overwrite: true                        # 可选，根据需要
+          provider: webdav
+
+          url:      ${{ secrets.WEBDAV_URL }}       # 通常是 https://xxx/remote.php/dav/files/xxx/
+          username: ${{ secrets.WEBDAV_USERNAME }}
+          password: ${{ secrets.WEBDAV_PASSWORD }}
+
+          root:     backups/github/my-noteBook/     # 远程目录，要以 / 开头和结尾
+
+          include:  |
+            backup-*.zip
+
+          # 可选：如果想覆盖同名文件（取决于服务器支持）
+          # overwrite: true   # 这个 action 可能不支持，需测试
+
+          # 可选：只上传，不保留本地（默认会保留）
+          # cleanup: true
