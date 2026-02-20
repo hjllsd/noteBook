@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "63a3b8c815476c14",
+        "id": "ea86a2ff0377406d",
         "type": "tabs",
         "children": [
           {
-            "id": "f7cbeab052a2f72e",
+            "id": "1eb1f6adbd23dc07",
             "type": "leaf",
             "state": {
               "type": "split-diff-view",
               "state": {
-                "aFile": "数学/小学数学/算术/运算推导.md",
-                "bFile": "数学/小学数学/算术/运算推导.md",
+                "aFile": ".github/workflows/main.yml",
+                "bFile": ".github/workflows/main.yml",
                 "aRef": ""
               },
               "icon": "diff",
-              "title": "Diff: 运算推导  (Working Tree)"
+              "title": "Diff: main.yml  (Working Tree)"
             }
           }
         ]
@@ -194,8 +194,10 @@
       "periodic-notes:Open today": false
     }
   },
-  "active": "f7cbeab052a2f72e",
+  "active": "e888c18fd5ba721e",
   "lastOpenFiles": [
+    "PC逆向/未命名",
+    "conflict-files-obsidian-git.md",
     "数学/小学数学/算术/运算推导.md",
     "我的/工作流/数据安全与隐私.md",
     "().md",
