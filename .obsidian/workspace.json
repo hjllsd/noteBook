@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "410970ebd2c23f94",
+        "id": "63a3b8c815476c14",
         "type": "tabs",
         "children": [
           {
-            "id": "9a29f086a770bcaa",
+            "id": "f7cbeab052a2f72e",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
-              "icon": "lucide-file",
-              "title": "新标签页"
+              "type": "split-diff-view",
+              "state": {
+                "aFile": "数学/小学数学/算术/运算推导.md",
+                "bFile": "数学/小学数学/算术/运算推导.md",
+                "aRef": ""
+              },
+              "icon": "diff",
+              "title": "Diff: 运算推导  (Working Tree)"
             }
           }
         ]
@@ -190,8 +194,18 @@
       "periodic-notes:Open today": false
     }
   },
-  "active": "e888c18fd5ba721e",
+  "active": "f7cbeab052a2f72e",
   "lastOpenFiles": [
+    "数学/小学数学/算术/运算推导.md",
+    "我的/工作流/数据安全与隐私.md",
+    "().md",
+    "名词介绍/2+1方案.md",
+    "名词介绍",
+    "我的/工作流/未命名",
+    "社会工程学.md",
+    "[ Documentation.md",
+    "[Duplicati Documentation.md",
+    "Duplicati.md",
     "我的/工作流",
     "我的",
     "数学/小学数学/未命名.md",
@@ -206,11 +220,7 @@
     "复盘/日复盘/2025-06-28 日复盘.md",
     "复盘/日复盘/2026-02-09 日复盘.md",
     "复盘/日复盘/2025-06-23 日复盘.md",
-    "复盘/周复盘",
     "我的/方法论/时间方法论整理/零碎.md",
-    "社会工程学/books/社会工程：安全体系中的人性漏洞 ([美]Christopher Hadnagy [Hadnagy, Christopher]) (Z-Library).pdf",
-    "我的/方法论/时间方法论整理",
-    "社会工程学.md",
     "未命名 1.md",
     "写作/什么是方法论和工作流,为什么需要,怎么使用.md"
   ]
